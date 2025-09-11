@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		A6E2E8A62E71D5FF004B2643 /* KawausoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E2E8A52E71D5FF004B2643 /* KawausoView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		98672CCA2E71B78600BA58D5 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -27,6 +31,7 @@
 		98672CBB2E71B78400BA58D5 /* postureApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = postureApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		98672CC92E71B78600BA58D5 /* postureAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = postureAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		98672CD32E71B78600BA58D5 /* postureAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = postureAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6E2E8A52E71D5FF004B2643 /* KawausoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KawausoView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -88,6 +93,7 @@
 		98672CB22E71B78400BA58D5 = {
 			isa = PBXGroup;
 			children = (
+				A6E2E8A52E71D5FF004B2643 /* KawausoView.swift */,
 				98672CBD2E71B78400BA58D5 /* postureApp */,
 				98672CCC2E71B78600BA58D5 /* postureAppTests */,
 				98672CD62E71B78600BA58D5 /* postureAppUITests */,
@@ -249,6 +255,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A6E2E8A62E71D5FF004B2643 /* KawausoView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
