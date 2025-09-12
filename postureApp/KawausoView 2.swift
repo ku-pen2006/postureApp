@@ -4,7 +4,7 @@
 //    var body: some View {
 //            VStack {
 //                // カワウソの画像
-//                Image("kawauso")
+//                Image(systemName: "kawauso.")
 //                    .resizable()
 //                    .scaledToFit()
 //                    .frame(width: 200, height: 200)

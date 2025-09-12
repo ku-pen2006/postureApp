@@ -9,7 +9,8 @@ class CameraManager: NSObject, ObservableObject {
     
     private var lastProcessTime: Date = Date()
         /// 処理間隔（秒）
-        private let processInterval: TimeInterval = 1.5 // 0.5秒に1回処理する
+    private let processInterval: TimeInterval = 1
+    
     init(history: PostureHistory) {
         self.history = history
         super.init()
@@ -49,6 +50,15 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput,
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
+        // --- ↓↓↓ ここにコードを追加 ↓↓↓ ---
+               let now = Date()
+               // lastProcessTime から processInterval（5秒）以上経過していなければ、処理をスキップ
+               guard now.timeIntervalSince(lastProcessTime) >= processInterval else {
+                   return
+               }
+               // 最終処理時間を現在時刻に更新
+               lastProcessTime = now
+               // --- ↑↑↑ ここまで ---
 
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 

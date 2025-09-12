@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "kawauso.png",
+      "filename" : "Meerkat.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "Meerkat 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "Meerkat 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

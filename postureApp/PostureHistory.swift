@@ -36,7 +36,7 @@ class PostureHistory: ObservableObject {
     let sedentaryWarningPublisher = PassthroughSubject<Void, Never>()
     private var goodPostureStartTime: Date? = nil
     private var isWarningShownForCurrentSession = false
-    private let sedentaryTimeThreshold: TimeInterval = 10 // 👈 デバッグ用に10秒に変更
+    private let sedentaryTimeThreshold: TimeInterval = 3600 // 👈 デバッグ用に10秒に変更
 
     /// 新しい姿勢データを記録する
     func add(_ posture: PostureType) {
