@@ -23,15 +23,20 @@ struct PostureRecord: Identifiable {
     }
 }
 
+
 /// 姿勢の履歴データを管理するクラス
 class PostureHistory: ObservableObject {
     @Published private(set) var records: [PostureRecord] = []
     
-    // MARK: - 座りっぱなし警告機能
+    // MARK: - 警告機能
+    /// 悪い姿勢の種類を通知するためのPublisher
+    let badPostureWarningPublisher = PassthroughSubject<PostureType, Never>()
+    
+    /// 座りっぱなし警告機能
     let sedentaryWarningPublisher = PassthroughSubject<Void, Never>()
     private var goodPostureStartTime: Date? = nil
     private var isWarningShownForCurrentSession = false
-    private let sedentaryTimeThreshold: TimeInterval = 3600 // 1時間 (3600秒)
+    private let sedentaryTimeThreshold: TimeInterval = 3600 // 👈 デバッグ用に10秒に変更
 
     /// 新しい姿勢データを記録する
     func add(_ posture: PostureType) {
@@ -47,6 +52,12 @@ class PostureHistory: ObservableObject {
             } else {
                 let newRecord = PostureRecord(postureType: posture, startTime: Date(), endTime: Date())
                 self.records.append(newRecord)
+            }
+            
+            // 悪い姿勢だったら通知を送る
+            if posture != .good {
+                print("⚠️ 悪い姿勢を検知しました: \(posture.rawValue)")
+                self.badPostureWarningPublisher.send(posture)
             }
             
             // 座りっぱなし判定
@@ -74,7 +85,6 @@ class PostureHistory: ObservableObject {
         }
     }
 }
-
 // MARK: - グラフ用のデータ集計機能
 extension PostureHistory {
     /// 円グラフ用：今日の悪い姿勢の種類と、それぞれの合計時間（秒）を返す

@@ -1,15 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "ミーヤキャット２.png",
+      "filename" : "MeerkatOP.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
+      "filename" : "MeerkatOP 1.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
+      "filename" : "MeerkatOP 2.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
