@@ -6,15 +6,39 @@ class CameraManager: NSObject, ObservableObject {
     let session = AVCaptureSession()
     private var shoulderAngles: [Double] = []
     private var history: PostureHistory
-    
+
     private var lastProcessTime: Date = Date()
-        /// 処理間隔（秒）
     private let processInterval: TimeInterval = 1
-    
+
+    // 👇 検出されなかった場合の処理用
+    private var lastDetectedTime: Date = Date()
+    private let detectionTimeout: TimeInterval = 3 // 3秒以上検出なしでリセット
+
     init(history: PostureHistory) {
         self.history = history
         super.init()
-        setupCamera()
+        checkCameraPermission { granted in
+            if granted {
+                self.setupCamera()
+            } else {
+                print("❌ カメラの利用が拒否されています。システム環境設定で許可してください。")
+            }
+        }
+    }
+
+    private func checkCameraPermission(completion: @escaping (Bool) -> Void) {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            completion(true)
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                DispatchQueue.main.async { completion(granted) }
+            }
+        case .denied, .restricted:
+            completion(false)
+        @unknown default:
+            completion(false)
+        }
     }
 
     private func setupCamera() {
@@ -50,21 +74,15 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
     func captureOutput(_ output: AVCaptureOutput,
                        didOutput sampleBuffer: CMSampleBuffer,
                        from connection: AVCaptureConnection) {
-        // --- ↓↓↓ ここにコードを追加 ↓↓↓ ---
-               let now = Date()
-               // lastProcessTime から processInterval（5秒）以上経過していなければ、処理をスキップ
-               guard now.timeIntervalSince(lastProcessTime) >= processInterval else {
-                   return
-               }
-               // 最終処理時間を現在時刻に更新
-               lastProcessTime = now
-               // --- ↑↑↑ ここまで ---
+
+        let now = Date()
+        guard now.timeIntervalSince(lastProcessTime) >= processInterval else { return }
+        lastProcessTime = now
 
         guard let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return }
 
         let faceRequest = VNDetectFaceLandmarksRequest()
         let bodyRequest = VNDetectHumanBodyPoseRequest()
-
         let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer, options: [:])
 
         do {
@@ -74,12 +92,26 @@ extension CameraManager: AVCaptureVideoDataOutputSampleBufferDelegate {
             return
         }
 
+        var detected = false
+
         if let faces = faceRequest.results, let face = faces.first {
             analyzeFace(face)
+            detected = true
         }
 
         if let bodies = bodyRequest.results, let body = bodies.first {
             analyzeShoulders(body)
+            detected = true
+        }
+
+        if detected {
+            lastDetectedTime = now
+        } else {
+            // 検出できなかった時間がしきい値を超えたらリセット
+            if now.timeIntervalSince(lastDetectedTime) > detectionTimeout {
+                print("🙆‍♂️ ユーザーが映っていません → セッションリセット")
+                history.resetSession()
+            }
         }
     }
 

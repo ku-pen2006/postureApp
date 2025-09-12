@@ -86,3 +86,16 @@ struct ReflectionView: View {
         }
     }
 }
+// MARK: - 任意の日の悪い姿勢サマリー（円グラフ用）
+extension PostureHistory {
+    func summaryForDayPieChart(date: Date) -> [PostureType: TimeInterval] {
+        let calendar = Calendar.current
+        let dayRecords = records.filter { calendar.isDate($0.startTime, inSameDayAs: date) }
+        let badRecords = dayRecords.filter { $0.postureType != .good }
+        
+        return Dictionary(grouping: badRecords, by: { $0.postureType })
+            .mapValues { records in
+                records.reduce(0) { $0 + $1.duration }
+            }
+    }
+}
