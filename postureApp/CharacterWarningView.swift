@@ -6,15 +6,16 @@ struct CharacterWarningView: View {
     let message: String
     let imageName: String
     
-    
-    // @State private var isVisible = false // 👈 アニメーション用の変数を一時的に無効化
+    // 👇 アニメーション用の変数を有効に戻します
+    @State private var isVisible = false
 
     var body: some View {
         VStack {
             Spacer()
 
             HStack(alignment: .bottom) {
-                Image("MeerkatOpMouse")
+                // 👇 imageName変数を使うように戻して、警告の種類で画像が変わるようにします
+                Image(imageName)
                     .resizable()
                     .scaledToFit()
                     .frame(width: (NSScreen.main?.frame.width ?? 1024) * 0.3)
@@ -27,11 +28,16 @@ struct CharacterWarningView: View {
             }
             .padding(.bottom, 80)
         }
-        // .opacity(isVisible ? 1.0 : 0.0) // 👈 透明度のアニメーションを一時的に無効化
-        // .onAppear { ... } // 👈 表示時のアニメーション開始処理を一時的に無効化
+        // 👇 透明度のアニメーションを有効に戻します
+        .opacity(isVisible ? 1.0 : 0.0)
+        // 👇 表示されたときにアニメーションを開始する処理を有効に戻します
+        .onAppear {
+            withAnimation(.easeIn(duration: 0.5)) {
+                isVisible = true
+            }
+        }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.clear)
-//        .background(Color.blue.opacity(0.5)) 
         .ignoresSafeArea()
     }
 }
