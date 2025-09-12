@@ -6,7 +6,13 @@ struct CharacterWarningView: View {
     let message: String
     let imageName: String
     
+    //　表示する画像のアセット名リスト
+    private let meerkatImages = ["MeerkatCloseMouse", "MeerkatOpMouse", "MeerkatUpArm"]
+    
+    //画像を切り替えるためのタイマー
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     // 👇 アニメーション用の変数を有効に戻します
+    @State private var currentImageIndex = 0
     @State private var isVisible = false
 
     var body: some View {
@@ -15,12 +21,15 @@ struct CharacterWarningView: View {
 
             HStack(alignment: .bottom) {
                 // 👇 imageName変数を使うように戻して、警告の種類で画像が変わるようにします
-                Image(imageName)
+                Image(meerkatImages[currentImageIndex])
                     .resizable()
                     .scaledToFit()
                     .frame(width: (NSScreen.main?.frame.width ?? 1024) * 0.3)
                     .padding(.leading, 20)
-            
+                    .onReceive(timer) { _ in
+                        currentImageIndex = (currentImageIndex + 1) % meerkatImages.count
+                    }
+                    
                 BubbleView(message: message)
                     .frame(maxWidth: .infinity)
                     .padding(.trailing, 20)
@@ -57,7 +66,7 @@ struct BubbleView: View {
                     .fill(Color(red: 0.95, green: 0.85, blue: 0.95).opacity(0.95))
                     .frame(width: 25, height: 20)
                     .rotationEffect(.degrees(250))
-                    .offset(x: -12, y: 1)
+                    .offset(x: -11, y: 1)
                 , alignment: .bottomLeading
             )
             .font(.body)
