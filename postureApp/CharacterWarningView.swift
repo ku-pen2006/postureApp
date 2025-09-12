@@ -24,7 +24,7 @@ struct CharacterWarningView: View {
                 BubbleView(message: message)
                     .frame(maxWidth: .infinity)
                     .padding(.trailing, 20)
-                    .offset(y: -100)
+                    .offset(x: -150, y: -100)
             }
             .padding(.bottom, 80)
         }
@@ -32,7 +32,7 @@ struct CharacterWarningView: View {
         .opacity(isVisible ? 1.0 : 0.0)
         // 👇 表示されたときにアニメーションを開始する処理を有効に戻します
         .onAppear {
-            withAnimation(.easeIn(duration: 0.5)) {
+            withAnimation(.interpolatingSpring(stiffness: 170, damping: 15)) {
                 isVisible = true
             }
         }
@@ -49,19 +49,19 @@ struct BubbleView: View {
     var body: some View {
         Text(message)
             .padding(15)
-            .background(Color.white.opacity(0.95))
-            .cornerRadius(20)
+            .background(Color(red: 0.95, green: 0.85, blue: 0.95).opacity(0.95))
+            .cornerRadius(30)
             .shadow(radius: 7)
             .overlay(
                 Triangle()
-                    .fill(Color.white.opacity(0.95))
+                    .fill(Color(red: 0.95, green: 0.85, blue: 0.95).opacity(0.95))
                     .frame(width: 25, height: 20)
-                    .rotationEffect(.degrees(90))
-                    .offset(x: -15, y: 5)
+                    .rotationEffect(.degrees(250))
+                    .offset(x: -12, y: 1)
                 , alignment: .bottomLeading
             )
             .font(.body)
-            .foregroundColor(.black)
+            .foregroundColor(Color(red: 0.3, green: 0.2, blue: 0.1))
     }
 }
 
@@ -76,3 +76,4 @@ struct Triangle: Shape {
         return path
     }
 }
+
