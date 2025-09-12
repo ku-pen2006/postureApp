@@ -24,6 +24,10 @@ struct ContentView: View {
                 .tabItem {
                     Label("振り返り", systemImage: "clock.arrow.circlepath")
                 }
+            StretchView()
+                   .tabItem {
+                       Label("ストレッチ", systemImage: "figure.cooldown")
+                   }
         }
 
         }
