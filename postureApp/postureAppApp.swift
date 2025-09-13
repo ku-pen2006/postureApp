@@ -4,7 +4,7 @@ import Combine
 // MARK: - 休憩リマインダー管理
 class BreakReminderManager: ObservableObject {
     private var timer: AnyCancellable?
-    private let reminderTimes: [String] = ["9:08", "12:15", "14:45", "16:30"]
+    private let reminderTimes: [String] = ["10:30", "12:15", "14:45", "16:30"]
     private let calendar = Calendar.current
 
     let breakReminderPublisher = PassthroughSubject<Void, Never>()
