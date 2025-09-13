@@ -15,7 +15,8 @@ struct HomeView: View {
         "背筋を伸ばしてリフレッシュ！",
         "ちょっと肩を回してみない？",
         "お水を飲んでひと休みしよう！",
-        "いい姿勢、かっこいいよ！"
+        "いい姿勢、かっこいいよ！",
+        "今日の復習はできたか？サボらんとがんばりや！"
     ]
     
     // キャラ画像（複数フレームでアニメっぽく）
@@ -42,8 +43,7 @@ struct HomeView: View {
                 // 吹き出し
                 BubbleView(message: message)
                     .frame(maxWidth: 260)
-                    .padding(.trailing, 40)
-                    .padding(.top, 10)
+                    .offset(x: -20, y: -20)
             }
             
             Spacer()
