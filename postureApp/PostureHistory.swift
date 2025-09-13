@@ -25,7 +25,7 @@ class PostureHistory: ObservableObject {
 
     let badPostureWarningPublisher = PassthroughSubject<PostureType, Never>()
     let sedentaryWarningPublisher = PassthroughSubject<Void, Never>()
-
+    let breakTimeWarningPublisher = PassthroughSubject<Void, Never>() // ← これ追加！
     private var sessionStartTime: Date? = nil
     private var isWarningShownForCurrentSession = false
     private let sedentaryTimeThreshold: TimeInterval = 10 // 1時間
@@ -117,5 +117,34 @@ extension PostureHistory {
         }
 
         return summaries.sorted { $0.date < $1.date }
+    }
+}
+extension PostureHistory {
+    func scheduleBreakReminders() {
+        let calendar = Calendar.current
+        let times: [(hour: Int, minute: Int)] = [
+            (10, 30), (12, 15), (14, 45), (16, 30)
+        ]
+
+        for t in times {
+            var components = DateComponents()
+            components.hour = t.hour
+            components.minute = t.minute
+
+            if let triggerDate = calendar.nextDate(after: Date(),
+                                                   matching: components,
+                                                   matchingPolicy: .nextTime) {
+                let interval = triggerDate.timeIntervalSinceNow
+                DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+                    // 平日のみ（Mon-Fri）
+                    if calendar.isDateInWeekend(triggerDate) == false {
+                        print("🔔 休憩リマインダー: \(t.hour):\(t.minute)")
+                        self.breakTimeWarningPublisher.send()
+                    }
+                    // 毎日繰り返す
+                    self.scheduleBreakReminders()
+                }
+            }
+        }
     }
 }
